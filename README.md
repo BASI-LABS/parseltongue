@@ -19,6 +19,8 @@ Parseltongue is a powerful browser extension for text conversion and real-time t
 - **Tokenization Visualization**: Real-time token visualization with colored tokens.
 - **User Interface**: Easy access via popup and context menu integration.
 
+**To Add**: glitch token library, prompt library, language translation, prompt enhancer/mutator 
+
 ## Installation
 
 ### Clone the Repository
