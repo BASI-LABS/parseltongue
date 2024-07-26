@@ -26,10 +26,30 @@ interface RenderSettingItemProps {
 
 
 function Popup() {
-  const Images : string[] = [hf, openAI, anthopic];
-
-
+  const Images: string[] = [hf, openAI, anthopic];
   const [state, setState] = useState<AppState>(initialState);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  useEffect(() => {
+    const preloadImages = async () => {
+      try {
+        await Promise.all(Images.map(src => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+        }));
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error("Failed to preload images:", error);
+        setImagesLoaded(true); // Set to true even on error to allow rendering
+      }
+    };
+
+    preloadImages();
+  }, []);
 
   useEffect(() => {
     const fetchStoredState = async () => {
@@ -111,7 +131,7 @@ function Popup() {
       return newState;
     });
   };
-
+  
   interface ToggleSwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
@@ -140,7 +160,7 @@ function Popup() {
       </label>
     );
   };
-
+  
   const RenderSetting: React.FC<RenderSettingProps> = ({ setting, path }) => {
     switch (setting.type) {
       case 'toggle':
@@ -201,6 +221,14 @@ function Popup() {
     );
   };
 
+  if (!imagesLoaded) {
+    return (
+      <div className="bg-white font-normal w-[400px] h-[400px] flex items-center justify-center">
+        <div className="text-2xl font-bold">Loading...</div>
+      </div>
+    );
+  }
+
   if (state.isActive)
     return (
       <div className="bg-white font-normal w-[400px] h-[600px] overflow-y-hidden">
@@ -208,7 +236,7 @@ function Popup() {
         <div className="absolute z-10 cursor-default">
           <div className=" w-[400px] h-[600px] p-4 mx-auto bg-white rounded-xl shadow-md space-y-4 z-10">
             <div className=" flex p-2 border-b-[0.5px] border-b-black gap-x-1">
-              <img src={logo} className="w-12"></img>
+              <img src={logo} className="w-12" loading="eager"></img>
               <span className=" -ml-3 mt-[0.80rem] text-md font-bold">
                 ParselTongue
               </span>
@@ -277,3 +305,6 @@ function Popup() {
 }
 
 export default Popup;
+
+
+

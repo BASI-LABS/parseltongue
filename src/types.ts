@@ -81,13 +81,29 @@ export const initialState: AppState = {
     },
     leetspeak: {
       type: 'toggle',
-      value: false,
-      description: "Convert words into leetspeak"
+      value: true,
+      description: "Convert words into 1337."
     },
     base64: {
       type: 'toggle',
-      value: false,
-      description: "Convert words into base64"
+      value: true,
+      description: "Convert words into base64."
     },
+    binary: {
+      type: 'toggle',
+      value: true,
+      description: "Convert words into binary."
+    },
+    emoji: {
+      type: 'toggle',
+      value: true,
+      description: "Convert words into emojis."
+    },
+    // theme: {
+    //   type : 'dropdown',
+    //   value: 'dark',
+    //   options: ['dark', 'light'],
+    //   description: "Theme Settings"
+    // }
   }
 };
