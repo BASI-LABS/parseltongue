@@ -1,5 +1,8 @@
 # Parseltongue (αlpha)
 
+![parseltongue](https://github.com/user-attachments/assets/44c629cd-7545-4f95-8da0-130abed26dff)
+
+
 Parseltongue is a powerful browser extension for text conversion and real-time tokenization visualization, supporting formats like leetspeak, binary, base64, and more to come. Perfect for developers, linguists, and casual users to enhance text prompts on the fly.
 
 ## Compatibility
