@@ -9,11 +9,11 @@ Parseltongue is a powerful browser extension for text conversion and real-time t
 
 | Feature                     | Firefox          | Chrome           |
 |-----------------------------|------------------|------------------|
-| Text Conversion             | Fully compatible | Some bugs        |
-| Tokenization Visualization  | Fully compatible | Some bugs        |
-| Popup UI                    | Fully compatible | Some bugs        |
-| Context Menu Integration    | Fully compatible | Some bugs        |
-| Real-time Visualization     | Fully compatible | Some bugs        |
+| Text Conversion             | ✅ | ✅ |
+| Tokenization Visualization  | ✅ | ✅ |
+| Popup UI                    | ✅ | ✅ |
+| Context Menu Integration    | ✅ | ✅ |
+| Real-time Visualization     | ✅ | ✅ |
 
 
 ## Features
@@ -35,6 +35,8 @@ cd parseltongue
 
 ### Build the Extension
 
+**NOTE**: You can use the `/dist` folder within the repo as well, the bottom instruction are just for good measure.
+
 Parseltongue uses Webpack to bundle the extension. Follow these steps to compile the extension:
 
 1. **Install Dependencies**:
@@ -47,6 +49,8 @@ Parseltongue uses Webpack to bundle the extension. Follow these steps to compile
     npm run build
     ```
 
+
+
 ### Load the Extension
 
 #### Chrome
@@ -54,13 +58,38 @@ Parseltongue uses Webpack to bundle the extension. Follow these steps to compile
 1. Go to `chrome://extensions/`
 2. Enable "Developer mode"
 3. Click "Load unpacked"
-4. Select the `dist` directory
+3. Select the `manifest.json` file in the `dist` directory 
 
 #### Firefox
 
 1. Go to `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on..."
-3. Select any file in the `dist` directory
+3. Select the `manifest.json` file in the `dist` directory 
+
+### Accessing the Sidebar
+After activating the extension through the popup, you'll need to open the sidebar to access ParselTongue's full functionality. The process differs slightly between Chrome and Firefox:
+#### For Chrome Users
+
+Locate the ParselTongue icon in your browser's toolbar.
+Right-click on the icon to reveal a dropdown menu.
+Select "Open side panel" from the options presented.
+
+#### For Firefox Users
+
+Look for the sidebar icon in your browser's toolbar (usually represented by a box with lines).
+Click on this icon to toggle the sidebar view.
+If you don't see the sidebar icon, you can:
+
+Use the keyboard shortcut Ctrl+B (Cmd+B on Mac) to open the sidebar.
+Or, go to View > Sidebar in the main menu and select ParselTongue.
+
+
+
+For more detailed instructions on using Firefox's sidebar feature, you can refer to Mozilla's official support page: Using the Firefox Sidebar 
+Once opened, the ParselTongue sidebar will provide you with quick access to all of its text manipulation and analysis tools.
+
+Happy prompting :)
+
 
 ## Usage
 

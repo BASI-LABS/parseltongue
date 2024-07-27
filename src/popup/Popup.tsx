@@ -5,7 +5,7 @@ import Button from "../components/button";
 import Card from "../components/card";
 import ImageRotation from "../components/imageRotery";
 
-import sky from "../assets/blue-sky.png";
+import sky from "../assets/blue-sky.webp";
 import openAI from "../assets/openai-logomark.svg";
 import hf from "../assets/hf-logo.svg";
 import anthopic from "../assets/Anthropic.svg";
