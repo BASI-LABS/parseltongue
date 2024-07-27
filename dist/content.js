@@ -1,8 +1,18 @@
+/**
+ * Checks if the given element is a text input element.
+ * @param {HTMLElement} element - The element to check.
+ * @returns {boolean} True if the element is a text input, false otherwise.
+ */
 const isTextInput = (element) => {
-    return element instanceof HTMLTextAreaElement || 
-           (element instanceof HTMLInputElement && element.type === 'text');
+    return element instanceof HTMLTextAreaElement ||
+      (element instanceof HTMLInputElement && element.tagName === 'TEXT') ||
+      (element instanceof HTMLDivElement && element.tagName === 'DIV') ||
+      (element instanceof HTMLParagraphElement && element.tagName === 'P');
   };
   
+  /**
+   * Observes DOM changes and attaches event listeners to new text input elements.
+   */
   const observeDOM = () => {
     const observer = new MutationObserver((mutations) => {
       console.log("observe");
@@ -12,9 +22,11 @@ const isTextInput = (element) => {
             if (node instanceof HTMLElement) {
               const textInputs = node.querySelectorAll('textarea, input[type="text"]');
               textInputs.forEach((input) => {
+                // Add input event listener
                 input.addEventListener('input', (event) => {
                   if (isTextInput(event.target) && event.target === activeElement) {
                     console.log(event.target.value);
+                    // Send message to browser runtime
                     browser.runtime.sendMessage({
                       action: 'updateElementText',
                       text: event.target.value,
@@ -24,7 +36,7 @@ const isTextInput = (element) => {
                   }
                 });
   
-                // Add event listener for focus to update activeElement
+                // Add focus event listener to update activeElement
                 input.addEventListener('focus', (event) => {
                   if (isTextInput(event.target)) {
                     activeElement = event.target;
@@ -37,6 +49,7 @@ const isTextInput = (element) => {
       });
     });
   
+    // Start observing the document with the configured parameters
     observer.observe(document.body, { childList: true, subtree: true });
   };
   
@@ -45,23 +58,17 @@ const isTextInput = (element) => {
     observeDOM();
   });
   
-  // Initial event listeners for existing elements
-  document.addEventListener('click', (event) => {
-    if (isTextInput(event.target)) {
-      activeElement = event.target;
-    } else {
-      activeElement = null;
-    }
-  });
-  
+  /**
+   * Global input event listener for all text input elements.
+   */
   document.addEventListener('input', (event) => {
-    if (isTextInput(event.target) && event.target === activeElement) {
+    if (isTextInput(event.target)) {
+      // Send message to browser runtime
       browser.runtime.sendMessage({
         action: 'updateElementText',
-        text: event.target.value,
+        text: event.target.value || event.target.innerText,
         tagName: event.target.tagName.toLowerCase(),
         inputType: event.target.type
       }).catch(error => console.error('Error sending message:', error));
     }
   });
-  
