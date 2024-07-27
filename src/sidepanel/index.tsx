@@ -4,8 +4,6 @@ import '../index.css'
 import SidePanel from './Sidepanel';
 
 
-
-
 const root = document.createElement("div")
 root.className = "container"
 document.body.appendChild(root)

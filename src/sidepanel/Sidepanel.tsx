@@ -334,7 +334,7 @@ export default function SidePanel() {
         {showTokens && (
           <>
             <h2 className="text-xl font-semibold mb-2 text-center">
-              Tokenizer 🪙
+              Tokenizer 😀
             </h2>
             <div
               id="tokenizer"
@@ -354,7 +354,7 @@ export default function SidePanel() {
               <TextAreaWithCopyButton
                 id="leetspeak"
                 value={leetspeakText}
-                placeholder="Leetspeak output will appear here"
+                placeholder="Leetspeak 🦜 output will appear here"
               />
             </>
           )}
@@ -368,7 +368,7 @@ export default function SidePanel() {
               <TextAreaWithCopyButton
                 id="base64"
                 value={base64Text}
-                placeholder="Base64 output will appear here"
+                placeholder="Base64 🧬 output will appear here"
               />
             </>
           )}
@@ -383,7 +383,7 @@ export default function SidePanel() {
               <TextAreaWithCopyButton
                 id="base64"
                 value={binaryText}
-                placeholder="Base64 output will appear here"
+                placeholder="Binary 💾 output will appear here"
               />
             </>
           )}
@@ -398,7 +398,7 @@ export default function SidePanel() {
               <TextAreaWithCopyButton
                 id="base64"
                 value={emojiText}
-                placeholder="Base64 output will appear here"
+                placeholder="Emoji ✨ output will appear here"
               />
             </>
           )}
