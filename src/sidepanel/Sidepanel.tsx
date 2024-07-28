@@ -233,8 +233,8 @@ export default function SidePanel() {
         setTokenizedText(promptToTokens(message.text, encoder));
         setLeetspeakText(toLeetspeak(message.text));
         setBase64Text(toBase64(message.text));
-        setEmojiText(toRandomEmoji(message.text))
-        setBinaryText(toBinary(message.text))
+        setEmojiText(toRandomEmoji(message.text));
+        setBinaryText(toBinary(message.text));
       }
     };
 
@@ -301,8 +301,18 @@ export default function SidePanel() {
     isToggleSetting(state.settings.leetspeak) && state.settings.leetspeak.value;
   const showBase64: boolean =
     isToggleSetting(state.settings.base64) && state.settings.base64.value;
+  const showBinary: boolean =
+    isToggleSetting(state.settings.binary) && state.settings.binary.value;
+  const showEmoji =
+    isToggleSetting(state.settings.emoji) && state.settings.emoji.value;
 
-  if (!showTokens && !showLeetspeak && !showBase64) {
+  if (
+    !showTokens &&
+    !showLeetspeak &&
+    !showBase64 &&
+    !showBinary &&
+    !showEmoji
+  ) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
         <div className="text-center">
@@ -317,7 +327,7 @@ export default function SidePanel() {
     <div className="flex items-center justify-center w-screen h-screen bg-gray-100">
       <div className="h-full w-full max-w-md p-6 bg-white rounded-lg shadow-md flex flex-col">
         <h1 className="text-2xl font-extrabold mb-4 flex items-center justify-center text-center">
-        ParselTongue
+          ParselTongue
         </h1>
 
         <select
@@ -373,7 +383,6 @@ export default function SidePanel() {
             </>
           )}
 
-
         {(selectedOutput === "all" || selectedOutput === "binary") &&
           showBase64 && (
             <>
@@ -387,7 +396,6 @@ export default function SidePanel() {
               />
             </>
           )}
-
 
         {(selectedOutput === "all" || selectedOutput === "emoji") &&
           showBase64 && (
