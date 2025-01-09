@@ -12,7 +12,7 @@ import {
   Tiktoken,
   TiktokenModel,
 } from "js-tiktoken";
-import { toBase64, toBinary, toLeetspeak, toRandomEmoji } from "../utils";
+import { toBase64, toBinary, toLeetspeak, toPigLatin, toRandomEmoji } from "../utils";
 import {
   AppState,
   DropdownSetting,
@@ -145,6 +145,7 @@ export default function SidePanel() {
     null
   );
   const [leetspeakText, setLeetspeakText] = useState("");
+  const [pigLatinText, setPigLatinText] = useState("");
   const [base64Text, setBase64Text] = useState("");
   const [binaryText, setBinaryText] = useState("");
   const [emojiText, setEmojiText] = useState("");
@@ -232,6 +233,7 @@ export default function SidePanel() {
       if (message.action === "updateElementText") {
         setTokenizedText(promptToTokens(message.text, encoder));
         setLeetspeakText(toLeetspeak(message.text));
+        setPigLatinText(toPigLatin(message.text));
         setBase64Text(toBase64(message.text));
         setEmojiText(toRandomEmoji(message.text));
         setBinaryText(toBinary(message.text));
@@ -249,7 +251,7 @@ export default function SidePanel() {
 
   useEffect(() => {
     setTokenizedText(promptToTokens(atob(base64Text), encoder));
-  }, [encoder]);
+  }, [encoder, base64Text]);
 
   const promptToTokens = (text: string, encoder: Tiktoken) => {
     const colors = [
@@ -275,6 +277,7 @@ export default function SidePanel() {
   const outputOptions = [
     { value: "leetspeak", label: "Leetspeak" },
     { value: "base64", label: "Base64" },
+    { value: "pigLatin", label: "Pig Latin" },
     { value: "binary", label: "Binary" },
     { value: "emoji", label: "Emoji" },
   ];
@@ -301,6 +304,8 @@ export default function SidePanel() {
     isToggleSetting(state.settings.leetspeak) && state.settings.leetspeak.value;
   const showBase64: boolean =
     isToggleSetting(state.settings.base64) && state.settings.base64.value;
+  const showPigLatin: boolean =
+    isToggleSetting(state.settings.pigLatin) && state.settings.pigLatin.value;
   const showBinary: boolean =
     isToggleSetting(state.settings.binary) && state.settings.binary.value;
   const showEmoji =
@@ -310,6 +315,7 @@ export default function SidePanel() {
     !showTokens &&
     !showLeetspeak &&
     !showBase64 &&
+    !showPigLatin &&
     !showBinary &&
     !showEmoji
   ) {
@@ -379,6 +385,20 @@ export default function SidePanel() {
                 id="base64"
                 value={base64Text}
                 placeholder="Base64 🧬 output will appear here"
+              />
+            </>
+          )}
+
+        {(selectedOutput === "all" || selectedOutput === "pigLatin") &&
+          showBase64 && (
+            <>
+              <h2 className="text-xl font-semibold mb-2 text-center">
+                Pig Latin 🐷
+              </h2>
+              <TextAreaWithCopyButton
+                id="base64"
+                value={pigLatinText}
+                placeholder="Pig Latin 🐷 output will appear here"
               />
             </>
           )}

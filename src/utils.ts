@@ -2,6 +2,9 @@ type LeetDictionary = {
     [key: string]: string;
 };
 
+const VOWELS = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"];
+const PUNCTUATION = [".", ",", ";", ":", "!", "?", "'", "\"", "-", "—", "(", ")", "[", "]", "{", "}", "/", "\\", "|", "<", ">", "#", "@", "&", "*", "^", "~", "`", "_", "+", "=", "%", "$"]
+
 /**
  * Converts English text to leetspeak.
  * 
@@ -22,6 +25,41 @@ export function toLeetspeak(text: string): string {
     };
     
     return text.toLowerCase().split('').map(char => leetDict[char as keyof LeetDictionary] || char).join('');
+}
+
+/**
+ * Converts English text to Pig Latin encoding.
+ * 
+ * This function uses the heuristic rules of pig latin to encode
+ * the input text into a pig latin string.
+ * 
+ * NOTE: Avoid using regex for this. Memory reclamation eligibility
+ * from dereferenced regex objects can trigger garbage collection. That
+ * interruption can really fuck up performance when mapping large arrays.
+ * 
+ * @param {string} text - The input text to convert to Pig Latin.
+ * @returns {string} The Pig Latin encoded version of the input text.
+ */
+export function toPigLatin(text: string): string {
+    const findFirstVowel = (word: string): number => [...word].findIndex(char => VOWELS.includes(char))
+
+    if (!text || typeof text !== "string") {
+        throw new Error("Input must be a non-empty string");
+    }
+
+    const words = text.split(" ").filter(word => word.trim() !== "");
+    return words.map((word) => {
+        let [newWord, punctuation] = PUNCTUATION.includes(word[word.length - 1])
+          ? [word.slice(0, -1), word[word.length - 1]]
+          : [word, ""];
+        if (VOWELS.includes(newWord[0])) {
+            return newWord + "way" + punctuation;
+        } else {
+            const firstVowel = findFirstVowel(newWord)
+            const prefix = firstVowel === -1 ? newWord : newWord.slice(firstVowel) + newWord.slice(0, firstVowel)
+            return prefix + "ay" + punctuation;
+        }
+    }).join(" ")
 }
 
 /**
