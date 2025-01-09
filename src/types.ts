@@ -89,6 +89,11 @@ export const initialState: AppState = {
       value: true,
       description: "Convert words into base64."
     },
+    pigLatin: {
+      type: 'toggle',
+      value: true,
+      description: "Convert words into pig latin."
+    },
     binary: {
       type: 'toggle',
       value: true,
