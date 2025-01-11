@@ -94,6 +94,11 @@ export const initialState: AppState = {
       value: true,
       description: "Convert words into pig latin."
     },
+    scramble: {
+      type: 'toggle',
+      value: true,
+      description: "Convert words into scramble organization."
+    },
     binary: {
       type: 'toggle',
       value: true,
