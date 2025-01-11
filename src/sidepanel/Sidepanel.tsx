@@ -12,7 +12,7 @@ import {
   Tiktoken,
   TiktokenModel,
 } from "js-tiktoken";
-import { toBase64, toBinary, toLeetspeak, toPigLatin, toRandomEmoji } from "../utils";
+import { toBase64, toBinary, toLeetspeak, toPigLatin, toScramble, toRandomEmoji } from "../utils";
 import {
   AppState,
   DropdownSetting,
@@ -146,6 +146,7 @@ export default function SidePanel() {
   );
   const [leetspeakText, setLeetspeakText] = useState("");
   const [pigLatinText, setPigLatinText] = useState("");
+  const [scrambleText, setScrambleText] = useState("");
   const [base64Text, setBase64Text] = useState("");
   const [binaryText, setBinaryText] = useState("");
   const [emojiText, setEmojiText] = useState("");
@@ -234,6 +235,7 @@ export default function SidePanel() {
         setTokenizedText(promptToTokens(message.text, encoder));
         setLeetspeakText(toLeetspeak(message.text));
         setPigLatinText(toPigLatin(message.text));
+        setScrambleText(toScramble(message.text));
         setBase64Text(toBase64(message.text));
         setEmojiText(toRandomEmoji(message.text));
         setBinaryText(toBinary(message.text));
@@ -278,6 +280,7 @@ export default function SidePanel() {
     { value: "leetspeak", label: "Leetspeak" },
     { value: "base64", label: "Base64" },
     { value: "pigLatin", label: "Pig Latin" },
+    { value: "scramble", label: "Scramble" },
     { value: "binary", label: "Binary" },
     { value: "emoji", label: "Emoji" },
   ];
@@ -306,6 +309,8 @@ export default function SidePanel() {
     isToggleSetting(state.settings.base64) && state.settings.base64.value;
   const showPigLatin: boolean =
     isToggleSetting(state.settings.pigLatin) && state.settings.pigLatin.value;
+  const showScramble: boolean =
+    isToggleSetting(state.settings.scramble) && state.settings.scramble.value;
   const showBinary: boolean =
     isToggleSetting(state.settings.binary) && state.settings.binary.value;
   const showEmoji =
@@ -316,6 +321,7 @@ export default function SidePanel() {
     !showLeetspeak &&
     !showBase64 &&
     !showPigLatin &&
+    !showScramble &&
     !showBinary &&
     !showEmoji
   ) {
@@ -396,9 +402,23 @@ export default function SidePanel() {
                 Pig Latin 🐷
               </h2>
               <TextAreaWithCopyButton
-                id="base64"
+                id="pigLatin"
                 value={pigLatinText}
                 placeholder="Pig Latin 🐷 output will appear here"
+              />
+            </>
+          )}
+
+        {(selectedOutput === "all" || selectedOutput === "scramble") &&
+          showScramble && (
+            <>
+              <h2 className="text-xl font-semibold mb-2 text-center">
+                Scramble 🤪
+              </h2>
+              <TextAreaWithCopyButton
+                id="scramble"
+                value={scrambleText}
+                placeholder="Scramble 🤪 output will appear here"
               />
             </>
           )}
@@ -410,7 +430,7 @@ export default function SidePanel() {
                 Binary 💾
               </h2>
               <TextAreaWithCopyButton
-                id="base64"
+                id="binary"
                 value={binaryText}
                 placeholder="Binary 💾 output will appear here"
               />
@@ -424,7 +444,7 @@ export default function SidePanel() {
                 Emoji ✨
               </h2>
               <TextAreaWithCopyButton
-                id="base64"
+                id="emoji"
                 value={emojiText}
                 placeholder="Emoji ✨ output will appear here"
               />

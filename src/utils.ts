@@ -6,6 +6,86 @@ const VOWELS = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"];
 const PUNCTUATION = [".", ",", ";", ":", "!", "?", "'", "\"", "-", "—", "(", ")", "[", "]", "{", "}", "/", "\\", "|", "<", ">", "#", "@", "&", "*", "^", "~", "`", "_", "+", "=", "%", "$"]
 
 /**
+ * A simple in-memory key-value cache. 
+ *
+ * This class stores entries in a Map<K, V>, with methods
+ * to get, set, and delete entries.
+ */
+class KeyValueCache<K, V> {
+    private store: Map<K, V>;
+  
+    constructor() {
+      this.store = new Map<K, V>();
+    }
+  
+    /**
+     * Stores a value in the cache.
+     * @param key   The key under which to store the value.
+     * @param value The value to be stored.
+     */
+    public set(key: K, value: V): void {
+      this.store.set(key, value);
+    }
+  
+    /**
+     * Retrieves a value from the cache.
+     * @param key The key of the value to retrieve.
+     * @returns   The value, or undefined if no entry is found.
+     */
+    public get(key: K): V | undefined {
+      return this.store.get(key);
+    }
+  
+    /**
+     * Returns whether the cache contains an entry for the key.
+     * @param key The key to check.
+     * @returns   A boolean indicating if the key exists in the cache.
+     */
+    public has(key: K): boolean {
+      return this.store.has(key);
+    }
+  
+    /**
+     * Removes an entry from the cache.
+     * @param key The key to remove.
+     * @returns   A boolean indicating whether the key was deleted.
+     */
+    public delete(key: K): boolean {
+      return this.store.delete(key);
+    }
+  
+    /**
+     * Clears all entries from the cache.
+     */
+    public clear(): void {
+      this.store.clear();
+    }
+  
+    /**
+     * Returns the number of items in the cache.
+     */
+    public size(): number {
+      return this.store.size;
+    }
+}
+
+function removePunctation(word: string): string {
+    let result = "";
+    for (const char of word) {
+      if (!PUNCTUATION.includes(char)) { result += char }
+    }
+    return result;
+}
+
+function extractSuffixPunctation(word: string): [string, string] {
+    return PUNCTUATION.includes(word[word.length - 1])
+    ? [word.slice(0, -1), word[word.length - 1]]
+    : [word, ""];
+}
+
+const scrambleCache = new KeyValueCache<string, string>();
+
+/**
  * Converts English text to leetspeak.
  * 
  * This function replaces certain letters with numbers or symbols
@@ -49,9 +129,7 @@ export function toPigLatin(text: string): string {
 
     const words = text.split(" ").filter(word => word.trim() !== "");
     return words.map((word) => {
-        let [newWord, punctuation] = PUNCTUATION.includes(word[word.length - 1])
-          ? [word.slice(0, -1), word[word.length - 1]]
-          : [word, ""];
+        let [newWord, punctuation] = extractSuffixPunctation(word)
         if (VOWELS.includes(newWord[0])) {
             return newWord + "way" + punctuation;
         } else {
@@ -60,6 +138,40 @@ export function toPigLatin(text: string): string {
             return prefix + "ay" + punctuation;
         }
     }).join(" ")
+}
+
+/**
+ * Converts English text to scramble encoding.
+ * 
+ * This function takes each word in a sentence and randomly scrambles
+ * the interior characters of the word. The first and last characters
+ * are preserved.
+ * 
+ * @param {string} text - The input text to convert to Pig Latin.
+ * @returns {string} The scramble encoded version of the input text.
+ */
+export function toScramble(text: string): string {
+    if (!text || typeof text !== "string") {
+        throw new Error("Input must be a non-empty string");
+    }
+
+    const words = text.split(" ").filter(word => word.trim() !== "");
+    return words.map((word) => {
+        if (word.length <= 3) return word;
+        if (word[1] === word[2] && word.length === 4) return word;  // e.g. "food", "keen"
+        
+        const [sanitizedWord, punctuation] = extractSuffixPunctation(word)
+        if (scrambleCache.has(sanitizedWord)) return scrambleCache.get(sanitizedWord) as string + punctuation;
+
+        const interior = removePunctation(sanitizedWord.slice(1, -1));
+        const scrambledInterior = interior.split('').sort(() => Math.random() - 0.5).join('');
+        const scrambledWord =
+            sanitizedWord[0] +
+            scrambledInterior +
+            sanitizedWord[sanitizedWord.length - 1]
+        scrambleCache.set(sanitizedWord, scrambledWord);
+        return scrambledWord + punctuation;
+    }).join(" ");
 }
 
 /**
